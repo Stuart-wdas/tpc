@@ -1,0 +1,10 @@
+-- Original application DDL used to verify adoption of pre-Drizzle databases.
+CREATE TABLE profiles (user_id text PRIMARY KEY REFERENCES "user"(id) ON DELETE CASCADE, city text NOT NULL DEFAULT 'Cape Town', interests text[] NOT NULL DEFAULT '{}');
+CREATE TABLE venues (id text PRIMARY KEY, owner_id text NOT NULL REFERENCES "user"(id), name text NOT NULL, description text NOT NULL, city text NOT NULL, address text NOT NULL, category text NOT NULL, website text NOT NULL DEFAULT '', status text NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','approved','rejected')), review_note text NOT NULL DEFAULT '', created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE events (id text PRIMARY KEY, venue_id text NOT NULL REFERENCES venues(id), title text NOT NULL, description text NOT NULL, category text NOT NULL, starts_at timestamptz NOT NULL, duration integer NOT NULL CHECK(duration BETWEEN 15 AND 1440), capacity integer NOT NULL CHECK(capacity BETWEEN 1 AND 1000), price integer NOT NULL DEFAULT 0 CHECK(price=0), image text NOT NULL DEFAULT 'coffee', status text NOT NULL DEFAULT 'draft' CHECK(status IN ('draft','pending','approved','rejected','cancelled')), review_note text NOT NULL DEFAULT '', created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE bookings (id text PRIMARY KEY, event_id text NOT NULL REFERENCES events(id), user_id text NOT NULL REFERENCES "user"(id), status text NOT NULL DEFAULT 'confirmed' CHECK(status IN ('confirmed','cancelled')), checked_in boolean NOT NULL DEFAULT false, created_at timestamptz NOT NULL DEFAULT now(), UNIQUE(event_id,user_id));
+CREATE TABLE saved_events (user_id text REFERENCES "user"(id) ON DELETE CASCADE, event_id text REFERENCES events(id) ON DELETE CASCADE, PRIMARY KEY(user_id,event_id));
+CREATE TABLE audit_log (id bigserial PRIMARY KEY, actor_id text REFERENCES "user"(id), action text NOT NULL, target_id text NOT NULL, note text NOT NULL DEFAULT '', created_at timestamptz DEFAULT now());
+CREATE INDEX events_discovery ON events(status,starts_at);
+CREATE INDEX bookings_event_status ON bookings(event_id,status);
+CREATE INDEX venues_owner ON venues(owner_id);

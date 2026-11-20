@@ -1,0 +1,15 @@
+{
+  "id": "/",
+  "name": "The Third Place Collective",
+  "short_name": "TPC",
+  "description": "Find your people, in your city.",
+  "start_url": "/discover",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7e6be",
+  "theme_color": "#f7e6be",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

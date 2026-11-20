@@ -1,0 +1,47 @@
+{
+  "name": "@tpc/backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/dev.ts",
+    "check": "tsc --noEmit",
+    "build": "npm run check && esbuild src/index.ts --bundle --platform=node --packages=external --format=esm --outfile=dist/index.js",
+    "start": "node dist/index.js",
+    "db:setup": "tsx src/setup.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/database/migrate-cli.ts",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:production": "npm run build --prefix ../frontend && npm run build && tsx tests/production-smoke.ts"
+  },
+  "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.7.11",
+    "better-auth": "^1.7.11",
+    "dotenv": "^17.3.1",
+    "drizzle-orm": "^0.45.4",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "@types/pg": "^8.23.1",
+    "@types/supertest": "^7.2.1",
+    "drizzle-kit": "^0.31.11",
+    "esbuild": "^0.28.2",
+    "prettier": "^3.9.10",
+    "supertest": "^7.3.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.12"
+  },
+  "overrides": {
+    "esbuild": "^0.28.2"
+  }
+}
